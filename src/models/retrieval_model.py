@@ -6,7 +6,6 @@ import numpy as np
 from fastai import layers
 import pytorch_lightning as pl
 from pytorch_metric_learning import testers
-from pytorch_metric_learning import testers
 from pytorch_metric_learning import losses, distances
 
 

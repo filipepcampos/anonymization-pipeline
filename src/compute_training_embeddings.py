@@ -8,8 +8,6 @@ import yaml
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-# make training deterministic
-pl.seed_everything(3)
 
 dataset = MIMIC_CXR_Dataset(
     image_resize=256,
@@ -17,9 +15,7 @@ dataset = MIMIC_CXR_Dataset(
         [
             transforms.Resize(256),
             transforms.ToTensor(),
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-            ),  # TODO: I should check these transforms again
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     ),
     augment_horizontal_flip=False,
@@ -43,5 +39,5 @@ for i, batch in enumerate(dataloader):
     for i in range(len(batch["path"])):
         lookup_table[batch["path"][i]] = embedding[i].detach().cpu().numpy()
 
-print(len(lookup_table.keys()))
+print(f"Created lookup table for {len(lookup_table.keys())} images")
 torch.save(lookup_table, config["lookup_table_output"])

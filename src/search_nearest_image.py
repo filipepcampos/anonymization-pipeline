@@ -25,7 +25,7 @@ dataset = ImageFolder(
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     ),
-)  # TODO: These transforms should be revisited, they're definetly not the same for each model
+)
 
 print("Loading lookup table")
 lookup_table = torch.load(config["lookup_table_output"])
@@ -38,7 +38,7 @@ path_array = np.array(list(lookup_table.keys()))
 embeddings_array = np.array(list(lookup_table.values()))
 tree = KDTree(embeddings_array)
 
-N_IMAGES = 3  # TODO: Get a clearer name for this variable
+N_IMAGES = 3  # Number of real images which should be retrieved for each synthetic image
 
 print("Computing nearest images")
 
@@ -60,4 +60,4 @@ with open(config["nearest_images_output"], "w") as f:
                     f"{dataset.imgs[BATCH_SIZE*batch_idx + b][0]},{path},{distances[b, j]},{j}\n"
                 )
 end = time.time()
-print(f"Elapsed time: {end - start}")
+print(f"Elapsed time: {end - start}s")
