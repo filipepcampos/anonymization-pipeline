@@ -9,11 +9,15 @@ class VerificationDataset(Dataset):
         self.df = pd.read_csv(filename)
 
         if transform is None:
-            self.transform = transforms.Compose([
-                transforms.Resize(256),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ]) # TODO: Check these transforms again
+            self.transform = transforms.Compose(
+                [
+                    transforms.Resize(256),
+                    transforms.ToTensor(),
+                    transforms.Normalize(
+                        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                    ),
+                ]
+            )  # TODO: Check these transforms again
         else:
             self.transform = transform
 
@@ -25,12 +29,14 @@ class VerificationDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        synthetic_image = self.transform(Image.open(row["synthetic_image"]).convert('RGB'))
-        real_image = self.transform(Image.open(row["real_image"]).convert('RGB'))
+        synthetic_image = self.transform(
+            Image.open(row["synthetic_image"]).convert("RGB")
+        )
+        real_image = self.transform(Image.open(row["real_image"]).convert("RGB"))
         data = {
-            'distance': row['distance'],
-            'rank': row['rank'],
-            'synthetic_image_path': row['synthetic_image'],
-            'real_image_path': row['real_image']
+            "distance": row["distance"],
+            "rank": row["rank"],
+            "synthetic_image_path": row["synthetic_image"],
+            "real_image_path": row["real_image"],
         }
         return synthetic_image, real_image, data

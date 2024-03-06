@@ -4,29 +4,39 @@ import torchvision.models as models
 
 
 class SiameseNetwork(nn.Module):
-    def __init__(self, network='ResNet-50', in_channels=3, n_features=128):
+    def __init__(self, network="ResNet-50", in_channels=3, n_features=128):
         super(SiameseNetwork, self).__init__()
         self.network = network
         self.in_channels = in_channels
         self.n_features = n_features
 
-        if self.network == 'ResNet-50':
+        if self.network == "ResNet-50":
             # Model: Use ResNet-50 architecture
             self.model = models.resnet50(pretrained=True)
             # Adjust the input layer: either 1 or 3 input channels
             if self.in_channels == 1:
-                self.model.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+                self.model.conv1 = nn.Conv2d(
+                    1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+                )
             elif self.in_channels == 3:
                 pass
             else:
                 raise Exception(
-                    'Invalid argument: ' + self.in_channels + '\nChoose either in_channels=1 or in_channels=3')
+                    "Invalid argument: "
+                    + self.in_channels
+                    + "\nChoose either in_channels=1 or in_channels=3"
+                )
             # Adjust the ResNet classification layer to produce feature vectors of a specific size
-            self.model.fc = nn.Linear(in_features=2048, out_features=self.n_features, bias=True)
+            self.model.fc = nn.Linear(
+                in_features=2048, out_features=self.n_features, bias=True
+            )
 
         else:
-            raise Exception('Invalid argument: ' + self.network +
-                            '\nChoose ResNet-50! Other architectures are not yet implemented in this framework.')
+            raise Exception(
+                "Invalid argument: "
+                + self.network
+                + "\nChoose ResNet-50! Other architectures are not yet implemented in this framework."
+            )
 
         self.fc_end = nn.Linear(self.n_features, 1)
 

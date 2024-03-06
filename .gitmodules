@@ -1,6 +1,0 @@
-[submodule "src/patient-verification"]
-	path = src/patient-verification
-	url = git@github.com:filipepcampos/patient-verification.git
-[submodule "src/patient-retrieval"]
-	path = src/patient-retrieval
-	url = git@github.com:filipepcampos/patient-retrieval.git
