@@ -14,10 +14,11 @@ class VerificationDataset(Dataset):
                     transforms.Resize(256),
                     transforms.ToTensor(),
                     transforms.Normalize(
-                        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                        mean=[0.485, 0.456, 0.406],
+                        std=[0.229, 0.224, 0.225],
                     ),
-                ]
-            )  # TODO: Check these transforms again
+                ],
+            )
         else:
             self.transform = transform
 
@@ -30,7 +31,7 @@ class VerificationDataset(Dataset):
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
         synthetic_image = self.transform(
-            Image.open(row["synthetic_image"]).convert("RGB")
+            Image.open(row["synthetic_image"]).convert("RGB"),
         )
         real_image = self.transform(Image.open(row["real_image"]).convert("RGB"))
         data = {

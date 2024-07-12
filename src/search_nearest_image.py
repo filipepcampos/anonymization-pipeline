@@ -11,7 +11,7 @@ import yaml
 # make training deterministic
 pl.seed_everything(3)
 
-with open("config.yaml", "r") as f:
+with open("config.yaml") as f:
     config = yaml.safe_load(f)
 
 print("Loading dataset")
@@ -23,7 +23,7 @@ dataset = ImageFolder(
             transforms.Resize(256),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
+        ],
     ),
 )
 
@@ -57,7 +57,7 @@ with open(config["nearest_images_output"], "w") as f:
             for j in range(N_IMAGES):
                 path = path_array[nearest_idx[b, j]]
                 f.write(
-                    f"{dataset.imgs[BATCH_SIZE*batch_idx + b][0]},{path},{distances[b, j]},{j}\n"
+                    f"{dataset.imgs[BATCH_SIZE*batch_idx + b][0]},{path},{distances[b, j]},{j}\n",
                 )
 end = time.time()
 print(f"Elapsed time: {end - start}s")

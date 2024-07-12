@@ -1,6 +1,6 @@
+fastai==2.7.14
+opencv-python==4.9.0.80
+pytorch-lightning==2.2.1
+pytorch-metric-learning==0.9.94
 torch==2.2.1
 torchvision==0.17.1
-pytorch-lightning==2.2.1
-fastai==2.7.14
-pytorch-metric-learning==0.9.94
-opencv-python==4.9.0.80

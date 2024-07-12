@@ -11,14 +11,17 @@ from pytorch_metric_learning import losses, distances
 
 class loss_wrapper(torch.nn.Module):
     def __init__(self, loss_func, embedding_size=128, miner=None, cbm_size=None):
-        super(loss_wrapper, self).__init__()
+        super().__init__()
         self.embedding_size = embedding_size
         self.cbm_size = cbm_size
         self.miner = miner
         self.loss_func = loss_func
         if self.cbm_size is not None:
             self.loss_func = losses.CrossBatchMemory(
-                self.loss_func, embedding_size, memory_size=cbm_size, miner=self.miner
+                self.loss_func,
+                embedding_size,
+                memory_size=cbm_size,
+                miner=self.miner,
             )
 
     def forward(self, embeddings, labels):
@@ -33,7 +36,7 @@ class loss_wrapper(torch.nn.Module):
 # the resNet50 class,  can be optionally pretrained
 class extractorRes50(nn.Module):
     def __init__(self, transfer_learning=True):
-        super(extractorRes50, self).__init__()
+        super().__init__()
 
         self.extractor_net = models.resnet50(pretrained=transfer_learning)
 
@@ -56,12 +59,20 @@ class extractorRes50(nn.Module):
 # our model head, used after extractor, here pooling and embedding size is defined
 class model_head(nn.Module):
     def __init__(
-        self, channel_size_in, embedding_size, pooling_size=1, channel_size_pre_flat=100
+        self,
+        channel_size_in,
+        embedding_size,
+        pooling_size=1,
+        channel_size_pre_flat=100,
     ):
-        super(model_head, self).__init__()
+        super().__init__()
         self.pooling = layers.AdaptiveConcatPool2d(pooling_size)
         self.bottle_neck_conv = nn.Conv2d(
-            channel_size_in, channel_size_pre_flat, kernel_size=1, stride=1, bias=False
+            channel_size_in,
+            channel_size_pre_flat,
+            kernel_size=1,
+            stride=1,
+            bias=False,
         )
         num_input_features = channel_size_pre_flat * (pooling_size**2) * 2
         bn1 = nn.BatchNorm1d(num_input_features)
@@ -74,7 +85,9 @@ class model_head(nn.Module):
             nn.ReLU(True),
         )
         self.second_fc = nn.Sequential(
-            bn2, nn.Dropout(0.25), nn.Linear(2048, embedding_size)
+            bn2,
+            nn.Dropout(0.25),
+            nn.Linear(2048, embedding_size),
         )
 
     def forward(self, x):
@@ -104,7 +117,6 @@ class RetrievalModel(pl.LightningModule):
         weight_decay=1e-5,
         num_workers=0,
     ):
-
         super().__init__()
         self.save_hyperparameters(
             "frozen_at_start",
@@ -132,7 +144,10 @@ class RetrievalModel(pl.LightningModule):
     # exclude certain layers from weight decay, taken from
     # https://github.com/PyTorchLightning/PyTorch-Lightning-Bolts/blob/master/pl_bolts/models/self_supervised/simclr/simclr_module.py#L64-L331
     def exclude_from_wt_decay(
-        self, named_params, weight_decay, skip_list=["bias", "bn"]
+        self,
+        named_params,
+        weight_decay,
+        skip_list=["bias", "bn"],
     ):
         params = []
         excluded_params = []
@@ -152,7 +167,8 @@ class RetrievalModel(pl.LightningModule):
 
     def configure_optimizers(self):
         params_to_train = self.exclude_from_wt_decay(
-            self.model.named_parameters(), weight_decay=self.hparams.weight_decay
+            self.model.named_parameters(),
+            weight_decay=self.hparams.weight_decay,
         )
         optimizer = torch.optim.SGD(
             params_to_train,
@@ -162,7 +178,7 @@ class RetrievalModel(pl.LightningModule):
         )
 
         """
-        This part is rather important, because you have to change the number of total steps when training, because the 
+        This part is rather important, because you have to change the number of total steps when training, because the
         learning rate depends on it when using OneCycleLR. Generally something like num_samples / batchsize
         """
 
@@ -194,10 +210,10 @@ class RetrievalModel(pl.LightningModule):
         embeddings = self(inputs)
         loss = self.loss_func(embeddings, labels)
         mean_distance = torch.mean(
-            self.distance.compute_mat(embeddings.type(torch.float), None)
+            self.distance.compute_mat(embeddings.type(torch.float), None),
         )
         max_distance = torch.max(
-            self.distance.compute_mat(embeddings.type(torch.float), None)
+            self.distance.compute_mat(embeddings.type(torch.float), None),
         )
         metrics = {
             "train_loss": loss,
@@ -243,10 +259,15 @@ class RetrievalModel(pl.LightningModule):
 
         print("Computing accuracy")
         accuracies = self.accuracy_calculator.get_accuracy(
-            embeddings, embeddings, np.squeeze(labels), np.squeeze(labels), True
+            embeddings,
+            embeddings,
+            np.squeeze(labels),
+            np.squeeze(labels),
+            True,
         )
         dist_mat = self.distance.compute_mat(
-            torch.tensor(embeddings, dtype=torch.float), None
+            torch.tensor(embeddings, dtype=torch.float),
+            None,
         )
         mean_distance = torch.mean(dist_mat)
         max_distance = torch.max(dist_mat)
@@ -254,8 +275,8 @@ class RetrievalModel(pl.LightningModule):
         print("max_distance = " + str(max_distance))
         print(
             "Test set accuracy (MAP@R) = {}".format(
-                accuracies["mean_average_precision_at_r"]
-            )
+                accuracies["mean_average_precision_at_r"],
+            ),
         )
         print("r_prec = " + str(accuracies["r_precision"]))
         print("prec_at_1 = " + str(accuracies["precision_at_1"]))
