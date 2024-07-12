@@ -1,11 +1,10 @@
 import torch
 from torchvision import transforms
-import pytorch_lightning as pl
 from models.retrieval_model import get_retrieval_model
 from dataset.mimic import MIMIC_CXR_Dataset
 import yaml
 
-with open("config.yaml", "r") as f:
+with open("config.yaml") as f:
     config = yaml.safe_load(f)
 
 
@@ -16,7 +15,7 @@ dataset = MIMIC_CXR_Dataset(
             transforms.Resize(256),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
+        ],
     ),
     augment_horizontal_flip=False,
     augment_vertical_flip=False,
