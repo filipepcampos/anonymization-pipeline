@@ -18,6 +18,10 @@ The experiments were run using Python 3.8.5 and CUDA 11.4, the remaining depende
 
 You first need to pre-train both the verification and retrieval models. Adjust the data paths in the `config.yaml` file and simply execute all the steps in sequential order.
 
+## License
+
+This project is licensed under an GPL-3.0 License, see [LICENSE](LICENSE) for more details.
+
 ## References
 <a id="1">[1]</a> 
 K. Packhäuser, L. Folle, F. Thamm and A. Maier, "Generation of Anonymous Chest Radiographs Using Latent Diffusion Models for Training Thoracic Abnormality Classification Systems," 2023 IEEE 20th International Symposium on Biomedical Imaging (ISBI), Cartagena, Colombia, 2023, pp. 1-5, doi: 10.1109/ISBI53787.2023.10230346.
