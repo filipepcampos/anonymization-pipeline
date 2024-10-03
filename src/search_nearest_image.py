@@ -7,11 +7,14 @@ import time
 from models.retrieval_model import get_retrieval_model
 from sklearn.neighbors import KDTree
 import yaml
+import os
 
 # make training deterministic
 pl.seed_everything(3)
 
-with open("config.yaml", "r") as f:
+config_name = os.environ.get("CONFIG_NAME", "config.yaml")
+
+with open(config_name, "r") as f:
     config = yaml.safe_load(f)
 
 print("Loading dataset")

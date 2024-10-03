@@ -1,12 +1,10 @@
+import pandas as pd
 import torch.utils.data as data
 from torch import nn
 from pathlib import Path
 from torchvision import transforms as T
-import pandas as pd
-import math
-
-
 from PIL import Image
+import math
 
 
 class SimpleDataset2D(data.Dataset):
@@ -80,7 +78,6 @@ class SimpleDataset2D(data.Dataset):
     def get_weights(self):
         """Return list of class-weights for WeightedSampling"""
         return None
-
 
 class MIMIC_CXR_Dataset(SimpleDataset2D):
     def __init__(self, split_path, split="train", *args, **kwargs):

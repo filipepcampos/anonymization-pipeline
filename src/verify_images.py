@@ -2,8 +2,11 @@ import torch
 from models.verification_model import SiameseNetwork
 from dataset.verification_dataset import VerificationDataset
 import yaml
+import os
 
-with open("config.yaml", "r") as f:
+config_name = os.environ.get("CONFIG_NAME", "config.yaml")
+
+with open(config_name, "r") as f:
     config = yaml.safe_load(f)
 
 dataset = VerificationDataset(config["nearest_images_output"], max_rank=0)

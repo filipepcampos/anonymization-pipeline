@@ -1,4 +1,5 @@
 # Data
+dataset_name: mimic
 anonymous_dataset_path: /nas-ctm01/homes/fpcampos/dev/diffusion/medfusion/dataset/synthetic_250
 real_dataset_path: /nas-ctm01/datasets/public/MEDICAL/MIMIC-CXR
 real_dataset_splits_path: /nas-ctm01/homes/fpcampos/dev/diffusion/medfusion/data/mimic-cxr-2.0.0-split.csv
