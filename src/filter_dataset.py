@@ -35,6 +35,7 @@ hist = {
 for image in df.synthetic_image:
     anonymous_images[image] = True
 
+# Obtain some examples near different decision boundaries
 for row in df.itertuples():
     if row.score > 0.5:
         anonymous_images[row.synthetic_image] = False
@@ -95,7 +96,8 @@ def show_random_samples(img_list, output_filename):
 
 show_random_samples(non_anonymous_pairs, "filtered_dataset_non_anonymous_samples.png")
 show_random_samples(
-    barely_anonymous_pairs, "filtered_dataset_barely_anonymous_samples.png"
+    barely_anonymous_pairs,
+    "filtered_dataset_barely_anonymous_samples.png",
 )
 show_random_samples(anonymous_pairs, "filtered_dataset_anonymous_samples.png")
 

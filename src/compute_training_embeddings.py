@@ -1,6 +1,5 @@
 import torch
 from torchvision import transforms
-import pytorch_lightning as pl
 from models.retrieval_model import get_retrieval_model
 from dataset.mimic import MIMIC_CXR_Dataset
 from dataset.brax import BRAX_Dataset

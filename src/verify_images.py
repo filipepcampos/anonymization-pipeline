@@ -17,7 +17,6 @@ verification_model.load_state_dict(state_dict)
 
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=False)
 
-
 with open(config["verification_output"], "w") as f:
     f.write("synthetic_image,real_image,score\n")
     for synthetic_image, real_image, data in dataloader:
@@ -26,5 +25,5 @@ with open(config["verification_output"], "w") as f:
 
         for i in range(len(output)):
             f.write(
-                f'{data["synthetic_image_path"][i]},{data["real_image_path"][i]},{output[i].item()}\n'
+                f'{data["synthetic_image_path"][i]},{data["real_image_path"][i]},{output[i].item()}\n',
             )

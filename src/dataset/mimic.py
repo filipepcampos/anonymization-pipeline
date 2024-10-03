@@ -48,9 +48,10 @@ class SimpleDataset2D(data.Dataset):
                     ),
                     T.ToTensor(),
                     T.Normalize(
-                        mean=0.5, std=0.5
+                        mean=0.5,
+                        std=0.5,
                     ),  # WARNING: mean and std are not the target values but rather the values to subtract and divide by: [0, 1] -> [0-0.5, 1-0.5]/0.5 -> [-1, 1]
-                ]
+                ],
             )
         else:
             self.transform = transform
@@ -61,7 +62,6 @@ class SimpleDataset2D(data.Dataset):
     def __getitem__(self, index):
         rel_path_item = self.item_pointers[index]
         path_item = self.path_root / rel_path_item
-        # img = Image.open(path_item)
         img = self.load_item(path_item)
         return {"uid": rel_path_item.stem, "source": self.transform(img)}
 
@@ -95,13 +95,16 @@ class MIMIC_CXR_Dataset(SimpleDataset2D):
         labels = labels.dropna(subset=["subject_id"])
 
         labels = labels.merge(
-            splits, on="dicom_id", suffixes=("", "_right"), how="left"
+            splits,
+            on="dicom_id",
+            suffixes=("", "_right"),
+            how="left",
         )
 
         labels = labels[labels["split"] == split]
 
         labels["Cardiomegaly"] = labels["Cardiomegaly"].map(
-            lambda x: 2 if x < 0 or math.isnan(x) else x
+            lambda x: 2 if x < 0 or math.isnan(x) else x,
         )
         labels = labels.set_index("dicom_id")
 
